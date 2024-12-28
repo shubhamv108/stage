@@ -1,18 +1,17 @@
 import {Controller, Get, Post, Body, Delete, UseGuards, Query, HttpException, HttpStatus, Req} from '@nestjs/common';
 import {ApiBearerAuth, ApiQuery, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {UserService} from "./list.servce";
-import {User} from "../models/user.schema";
 import {AddUserListItemDto} from "./dto/add-user-list-item.dto";
-import {JwtAuthGuard} from "../auth/jwt-auth.guard";
 import {DeleteUserListItemDto} from "./dto/delete-user-list-item.dto";
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('List')
 @Controller('list')
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
 export class ListController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get()
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'offset', required: false, type: Number })
@@ -36,6 +35,8 @@ export class ListController {
     return this.userService.listMyItems(username, pagination);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Post()
   @ApiResponse({ status: 201, description: 'Item successfully added to the list.' })
   @ApiResponse({ status: 400, description: 'Invalid or duplicate item.' })
@@ -45,6 +46,8 @@ export class ListController {
       return { message: 'Item added successfully.' };
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Delete()
   async removeItem(@Req() req: any, @Body() deleteUserListItemDto: DeleteUserListItemDto) {
       const username = req.user.username;

@@ -13,6 +13,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         const request = context.switchToHttp().getRequest();
         const token = request.headers.authorization?.split(' ')[1]; // Extract token
 
+        if (!token) {
+            throw new UnauthorizedException('Authorization token not found');
+        }
+
         if (token) {
             try {
                 const decoded = this.jwtService.verify(token); // Verify the token
