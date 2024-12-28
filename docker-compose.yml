@@ -8,6 +8,16 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  redis:
+    image: redis:7.0 # Use the Redis version you prefer
+    container_name: redis-server
+    ports:
+      - "6379:6379" # Maps the Redis container port to your local machine
+    restart: always
+    volumes:
+      - redis-data:/data # Persistent storage for Redis data
+    command: [ "redis-server", "--appendonly", "yes" ] # Enable AOF for persistence
+
   app:
     build:
       context: .
@@ -21,4 +31,6 @@ services:
       MONGO_URL: mongodb://mongodb:27017/stagedb
 
 volumes:
+  redis-data:
+    driver: local
   mongo-data:

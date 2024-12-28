@@ -20,6 +20,7 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addServer('http://127.0.0.1:3000', 'Default Server')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
