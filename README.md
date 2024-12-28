@@ -117,4 +117,6 @@ Good Luck!
 
 Feel free to reach out if you have any questions or need clarification on the requirements. We're looking forward to reviewing your submission and evaluating how you tackle this task!
 
+Login/Logout with JWT
+![Screenshot from 2024-12-28 14-43-33](https://github.com/user-attachments/assets/40be08d9-51c7-47f5-a2bb-77036a6541e7)
 
