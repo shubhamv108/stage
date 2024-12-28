@@ -123,3 +123,5 @@ Login/Logout with JWT
 Post iser list item and get
 ![Screenshot from 2024-12-28 15-08-47](https://github.com/user-attachments/assets/006ea1a4-1e9a-4d4f-964f-2c7116b76e87)
 
+item removed
+![Screenshot from 2024-12-28 15-11-12](https://github.com/user-attachments/assets/641199f8-8e07-4257-9615-5a211e15831a)
