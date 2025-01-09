@@ -1,20 +1,25 @@
 import {ExecutionContext, Injectable, UnauthorizedException} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {JwtService} from "@nestjs/jwt";
-import {Observable} from "rxjs";
+import { RedisService } from '../redis/redis.service';
+import {AuthService} from "./auth.service";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-    constructor(private readonly jwtService: JwtService) {
+    constructor(
+        private readonly jwtService: JwtService,
+        private readonly redisService: RedisService) {
         super();
     }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
-        const token = request.headers.authorization?.split(' ')[1]; // Extract token
+        const token= await this.extractToken(request);
 
-        if (!token) {
-            throw new UnauthorizedException('Authorization token not found');
+        // Check if the token is blacklisted
+        const isBlacklisted = await this.redisService.get(token);
+        if (isBlacklisted) {
+            throw new UnauthorizedException('Token has been blacklisted');
         }
 
         if (token) {
@@ -35,5 +40,18 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         }
 
         return true;
+    }
+
+    async extractToken(request: any) {
+        let token = request.headers.authorization?.split(' ')[1]; // Extract token
+        if (!token) {
+            // Extract the access_token from the Cookie header
+            const cookies = request.cookies;
+            token = cookies?.credentials;
+            if (!token) {
+                throw new UnauthorizedException('Authorization token not found');
+            }
+        }
+        return token;
     }
 }
